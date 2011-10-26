@@ -4,3 +4,4 @@ war/**/*.symbolMap
 war/WEB-INF/deploy/productpresenter/symbolMaps/*
 war/WEB-INF/deploy/productpresenter/rpcPolicyManifest/manifests/*
 war/
+.apt_generated/

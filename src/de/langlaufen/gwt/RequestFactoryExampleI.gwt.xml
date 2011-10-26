@@ -13,7 +13,9 @@
 	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
 
 	<!-- Other module inherits -->
-
+    <!-- Logging                                      -->
+    <inherits name="com.google.gwt.logging.Logging"/>
+  
 	<!-- Specify the app entry point class. -->
 	<entry-point class='de.langlaufen.gwt.client.RequestFactoryExampleI' />
 
