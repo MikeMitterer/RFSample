@@ -15,9 +15,18 @@ public interface RequestFactoryX extends RequestFactory {
 	// DAOLocator erzeugt das PersonDAO objekt
 	public interface PersonRequestContext extends RequestContext {
 		// Diese Funktionen müssen in PersonDAO implementiert werden.
-		Request<PersonProxy> findById(Long id);
-
+		// Wenn Funktion nicht implementiert ist dann kommt eine Fehlermeldung dass die Funktion im TO nicht vorhanden ist (Person) - stimmt aber nicht
 		Request<PersonProxy> save(PersonProxy person);
+
+		Request<PersonProxy> persistPerson(final PersonProxy person);
+
+		Request<PersonProxy> findPerson(Long id);
+
+		Request<PersonProxy> getPrevPerson(final PersonProxy person);
+
+		Request<PersonProxy> getNextPerson(final PersonProxy person);
+
+		Request<PersonProxy> deletePerson(final PersonProxy person);
 	}
 
 	PersonRequestContext context();

@@ -1,8 +1,5 @@
 package de.langlaufen.gwt.client;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -16,23 +13,23 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 import de.langlaufen.gwt.client.RequestFactoryX.PersonRequestContext;
 import de.langlaufen.gwt.client.model.PersonProxy;
 
 public class RequestFactoryExampleI implements EntryPoint {
-	private static Logger					logger			= Logger.getLogger("NameOfYourLogger");
+
 	private static final EventBus			eventBus		= new SimpleEventBus();
 	private static final RequestFactoryX	requestFactory	= GWT.create(RequestFactoryX.class);
-	//private PersonProxy						personProxy		= null;
-	//private PersonRequestContext			context			= null;
-	//private PersonRequest personRequest = null;
+	private PersonProxy						personProxy		= null;
+	private PersonRequestContext			personRequest	= null;
 
 	final TextBox							idTextbox		= new TextBox();
 	final TextBox							vornameTextbox	= new TextBox();
 	final TextBox							nachnameTextbox	= new TextBox();
 
-	private PersonProxy createNew() {
+	private void createNew() {
 		// ein neues personProxy wird �ber die .create-Methode erzeugt. Es ist
 		// damit per default mutable (editierbar). Da es dem hier verwendeten
 		// personRequest zugeordnet ist
@@ -41,11 +38,8 @@ public class RequestFactoryExampleI implements EntryPoint {
 		// requestContext in den Editierstatus versetzt werden
 		// es ist somit nicht m�glich, diese Objekt erneut in den EditMode zu
 		// versetzen.
-		final PersonRequestContext context = requestFactory.context();
-
-		//personRequest = requestFactory.personRequest();
-		final PersonProxy personProxy = context.create(PersonProxy.class);
-		return personProxy;
+		personRequest = requestFactory.context();
+		personProxy = personRequest.create(PersonProxy.class);
 	}
 
 	private void populate(final PersonProxy personProxy) {
@@ -94,20 +88,90 @@ public class RequestFactoryExampleI implements EntryPoint {
 		absolutePanel.add(nachnameTextbox, 71, 74);
 		nachnameTextbox.setSize("206px", "12px");
 
-		//this.createNew();
-		//this.populate(personProxy);
+		this.createNew();
+		this.populate(personProxy);
 
 		final Button newButton = new Button("neu");
 		absolutePanel.add(newButton, 10, 129);
 		newButton.setSize("60px", "32px");
+		newButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(final ClickEvent event) {
+				personRequest = requestFactory.context();
+				personProxy = personRequest.create(PersonProxy.class);
+				populate(personProxy);
+			}
+		});
 
 		final Button loadPrevButton = new Button("<");
 		absolutePanel.add(loadPrevButton, 80, 129);
 		loadPrevButton.setSize("25px", "32px");
+		loadPrevButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(final ClickEvent event) {
+				if (personProxy.getId() != null) {
+					// In diesem Fall wurde der personRequest bereits einmal
+					// verwendet, es muss ein neuer personRequest generiert werden.
+					// Eine Id kann das personProxy nur durch einen Aufruf
+					// des Servers (mittels requestContext) erhalten haben.
+					// Hat das entityProxy keine Id, so wurde es �ber .create erzeugt. Der
+					// zugeh�rige personRequest wurde in diesem Fall noch nicht
+					// verwendet. Das PersonProxy   m u s s   deshalb �ber den gleichen personRequest zum
+					// Server gesendet werden.
+					personRequest = requestFactory.context();
+				}
+				personRequest.getPrevPerson(personProxy).fire(new Receiver<PersonProxy>() {
+					@Override
+					public void onSuccess(final PersonProxy prevPersonProxy) {
+						if (prevPersonProxy == null) {
+							createNew();
+						}
+						else {
+							personProxy = prevPersonProxy;
+						}
+						populate(personProxy);
+					}
+
+					@Override
+					public void onFailure(final ServerFailure error) {
+						// die onFailure-Implementierung ist optional und wird in den nachfolgenden Implementierungen weggelassen
+						super.onFailure(error);
+					}
+				});
+			}
+		});
 
 		final Button loadNextButton = new Button(">");
 		absolutePanel.add(loadNextButton, 115, 129);
 		loadNextButton.setSize("25px", "32px");
+		loadNextButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(final ClickEvent event) {
+				if (personProxy.getId() != null) {
+					// In diesem Fall wurde der personRequest bereits einmal
+					// verwendet, es muss ein neuer personRequest generiert werden.
+					// Eine Id kann das personProxy nur durch einen Aufruf
+					// des Servers (mittels requestContext) erhalten haben.
+					// Hat das entityProxy keine Id, so wurde es �ber .create erzeugt. Der
+					// zugeh�rige personRequest wurde in diesem Fall noch nicht
+					// verwendet. Das PersonProxy   m u s s   deshalb �ber den gleichen personRequest zum
+					// Server gesendet werden.
+					personRequest = requestFactory.context();
+				}
+				personRequest.getNextPerson(personProxy).fire(new Receiver<PersonProxy>() {
+					@Override
+					public void onSuccess(final PersonProxy nextPersonProxy) {
+						if (nextPersonProxy == null) {
+							createNew();
+						}
+						else {
+							personProxy = nextPersonProxy;
+						}
+						populate(personProxy);
+					}
+				});
+			}
+		});
 
 		final Button saveButton = new Button("speichern");
 		absolutePanel.add(saveButton, 150, 129);
@@ -115,10 +179,6 @@ public class RequestFactoryExampleI implements EntryPoint {
 		saveButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(final ClickEvent event) {
-				//PersonProxy personProxy = createNew();
-				PersonRequestContext context = requestFactory.context();
-				PersonProxy personProxy = context.create(PersonProxy.class);
-
 				if (personProxy.getId() == null) {
 					// personProxy wurde mit .create des RequestContext erzeugt
 					// und ist somit per default mutable (editierbar).
@@ -136,20 +196,19 @@ public class RequestFactoryExampleI implements EntryPoint {
 					// editierbar gesetzt werden. Dabei entsteht ein neues personProxy, das zugleich dem neuen requestContext
 					// zugewiesen ist
 					// Die RequestFactory liefert einen neuen RequestContext, der im personRequest gespeichert wird.
-					context = requestFactory.context();
+					personRequest = requestFactory.context();
 					// durch Verwendung der .edit Methode entsteht aus dem alten personProxy das neuen personProxy
-					personProxy = context.edit(personProxy);
+					personProxy = personRequest.edit(personProxy);
 				}
 				personProxy.setVorname(vornameTextbox.getText());
 				personProxy.setNachname(nachnameTextbox.getText());
-				context.save(personProxy).fire(new Receiver<PersonProxy>() {
+				personRequest.persistPerson(personProxy).fire(new Receiver<PersonProxy>() {
 					// Object wird persistiert. Wichtig ist, dass dabei eine ID
 					// vergeben wird (falls es sich um ein neues Object handelt)
 					@Override
 					public void onSuccess(final PersonProxy persistedPersonProxy) {
-						final PersonProxy personProxy = persistedPersonProxy;
-						logger.log(Level.FINE, personProxy.getVorname());
-						//populate(personProxy);
+						personProxy = persistedPersonProxy;
+						populate(personProxy);
 					}
 				});
 			}
@@ -158,6 +217,28 @@ public class RequestFactoryExampleI implements EntryPoint {
 		final Button deleteButton = new Button("l&ouml;schen");
 		absolutePanel.add(deleteButton, 225, 129);
 		deleteButton.setSize("60px", "32px");
-
+		deleteButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(final ClickEvent event) {
+				if (personProxy.getId() != null) {
+					// das L�schen ist nur erforderlich, wenn das PersonProxy bereits persistiert wurde
+					// in diesem Fall ben�tigen wir auch einen neuen PersonRequest
+					// die Methode 'deletePerson' liefert automatisch das n�chste PersonProxy, dieses wird anschlie�end angezeigt
+					personRequest = requestFactory.context();
+					personRequest.deletePerson(personProxy).fire(new Receiver<PersonProxy>() {
+						@Override
+						public void onSuccess(final PersonProxy nextPersonProxy) {
+							if (nextPersonProxy == null) {
+								createNew();
+							}
+							else {
+								personProxy = nextPersonProxy;
+							}
+							populate(personProxy);
+						}
+					});
+				}
+			}
+		});
 	}
 }
