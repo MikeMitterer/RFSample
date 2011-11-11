@@ -1,12 +1,13 @@
-package de.langlaufen.gwt.client.model;
+package at.mikemitterer.gwt.rfsample.client.model;
+
+import at.mikemitterer.gwt.rfsample.server.domain.Person;
+import at.mikemitterer.gwt.rfsample.server.service.UniversalEntityLocator;
 
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
 
-import de.langlaufen.gwt.server.domain.Person;
-import de.langlaufen.gwt.server.service.PersonLocator;
 
-@ProxyFor(value = Person.class, locator = PersonLocator.class)
+@ProxyFor(value = Person.class, locator = UniversalEntityLocator.class)
 public interface PersonProxy extends EntityProxy {
 
 	String getNachname();

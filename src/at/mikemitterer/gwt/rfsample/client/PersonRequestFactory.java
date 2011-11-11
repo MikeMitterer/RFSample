@@ -1,18 +1,20 @@
-package de.langlaufen.gwt.client;
+package at.mikemitterer.gwt.rfsample.client;
+
+import at.mikemitterer.gwt.rfsample.client.model.PersonProxy;
+import at.mikemitterer.gwt.rfsample.server.db.PersonDAO;
+import at.mikemitterer.gwt.rfsample.server.service.DAOServiceLocator;
 
 import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.RequestFactory;
 import com.google.web.bindery.requestfactory.shared.Service;
 
-import de.langlaufen.gwt.client.model.PersonProxy;
-import de.langlaufen.gwt.server.service.DAOLocator;
-import de.langlaufen.gwt.server.service.PersonDAO;
 
-public interface RequestFactoryX extends RequestFactory {
+public interface PersonRequestFactory extends RequestFactory {
 
-	@Service(value = PersonDAO.class, locator = DAOLocator.class)
-	// DAOLocator erzeugt das PersonDAO objekt
+	@Service(value = PersonDAO.class, locator = DAOServiceLocator.class)
+	// ServiceLocator wird benötigt damit die Requstfactory eine Instanz für
+	// das PersonDAO Objekt erzeugen kann.
 	public interface PersonRequestContext extends RequestContext {
 		// Diese Funktionen müssen in PersonDAO implementiert werden.
 		// Wenn Funktion nicht implementiert ist dann kommt eine Fehlermeldung dass die Funktion im TO nicht vorhanden ist (Person) - stimmt aber nicht
@@ -29,6 +31,6 @@ public interface RequestFactoryX extends RequestFactory {
 		Request<PersonProxy> deletePerson(final PersonProxy person);
 	}
 
-	PersonRequestContext context();
+	PersonRequestContext getPersonRequestContext();
 
 }
