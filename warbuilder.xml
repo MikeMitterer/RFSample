@@ -1,10 +1,9 @@
-<project name="RequestFactoryExampleI" basedir="." default="default">
+<project name="RFSample" basedir="." default="default">
 
 	<target name="default" depends="buildwar,deploy"></target>
 
 	<target name="buildwar">
-		<war basedir="war" destfile="
-RequestFactoryExampleI.war" webxml="war/WEB-INF/web.xml">
+		<war basedir="war" destfile="RFSample.war" webxml="war/WEB-INF/web.xml">
 			<exclude name="WEB-INF/**" />
 			<webinf dir="war/WEB-INF/">
 				<include name="**/*.jar" />
@@ -13,8 +12,7 @@ RequestFactoryExampleI.war" webxml="war/WEB-INF/web.xml">
 	</target>
 
 	<target name="deploy">
-		<copy file="
-RequestFactoryExampleI.war" todir="." />
+		<copy file="RFSample.war" todir="." />
 	</target>
 
 </project>
