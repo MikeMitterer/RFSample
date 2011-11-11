@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project name="Demo" default="version" basedir=".">
-
+	<!-- This file came from: https://gist.github.com/874521 -->
 	<macrodef name="git">
 		<attribute name="command" />
 		<attribute name="dir" default="" />
@@ -15,14 +15,22 @@
 	</macrodef>
 
 	<target name="version" description="Commits all changes to version git">
-		<input message="Commit message" addproperty="commit-message" />
-
+		<echo message="Current status for git:" />
+		<git command="status"/>
+		<echo></echo>
+		<echo message="git add . has to be done by hand to avoid unnecessary files in repository." />
+		
+		<echo></echo>
+		<input message="Enter commit message:" addproperty="commit-message" />
 		<echo message="Commiting all changes with message ${commit-message}" />
+
+		<!--
 		<git command="add">
 			<args>
 				<arg value="." />
 			</args>
 		</git>
+		-->
 		<git command="commit">
 			<args>
 				<arg value="-am ${commit-message}" />
