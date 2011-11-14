@@ -17,6 +17,10 @@ public class Person extends DatastoreObject {
 	@Column(name = "nachnameX")
 	private String			nachname;
 
+	public Person() {
+		logger.debug("Constructor Person");
+	}
+
 	public String getVorname() {
 		return this.vorname;
 	}

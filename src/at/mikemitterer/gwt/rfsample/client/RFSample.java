@@ -235,6 +235,8 @@ public class RFSample implements EntryPoint {
 				}
 				personProxy.setVorname(vornameTextbox.getText());
 				personProxy.setNachname(nachnameTextbox.getText());
+				logger.log(Level.INFO, "fire persistPerson");
+
 				personRequestContext.persistPerson(personProxy).fire(new Receiver<PersonProxy>() {
 					// Object wird persistiert. Wichtig ist, dass dabei eine ID
 					// vergeben wird (falls es sich um ein neues Object handelt)

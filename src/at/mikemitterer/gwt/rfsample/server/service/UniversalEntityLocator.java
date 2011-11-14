@@ -10,7 +10,7 @@ import com.google.web.bindery.requestfactory.shared.Locator;
 
 public class UniversalEntityLocator extends Locator<DatastoreObject, Long> {
 	//GWT Logger: private static Logger	logger	= Logger.getLogger(UniversalEntityLocator.class.getName());
-	private static Logger	logger	= LoggerFactory.getLogger(DAOServiceLocator.class.getSimpleName());
+	private static Logger	logger	= LoggerFactory.getLogger(UniversalEntityLocator.class.getSimpleName());
 
 	@Override
 	public DatastoreObject create(final Class<? extends DatastoreObject> clazz) {

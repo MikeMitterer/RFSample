@@ -15,7 +15,7 @@
 	</macrodef>
 
 	<target name="version" description="Commits all changes to version git">
-		<echo message="Current status for git:" />
+		<echo  message="Current status for git:" />
 		<git command="status"/>
 		<echo></echo>
 		<echo message="git add . has to be done by hand to avoid unnecessary files in repository." />
