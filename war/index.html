@@ -1,0 +1,46 @@
+<!doctype html>
+<!-- The DOCTYPE declaration above will set the    -->
+<!-- browser's rendering engine into               -->
+<!-- "Standards Mode". Replacing this declaration  -->
+<!-- with a "Quirks Mode" doctype may lead to some -->
+<!-- differences in layout.                        -->
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <!--                                                               -->
+    <!-- Consider inlining CSS to reduce the number of requested files -->
+    <!--                                                               -->
+    <link type="text/css" rel="stylesheet" href="css/global.css">
+
+    <!--                                           -->
+    <!-- Any title is fine                         -->
+    <!--                                           -->
+    <title>RFSample</title>
+    
+    <!--                                           -->
+    <!-- This script loads your compiled module.   -->
+    <!-- If you add any GWT meta tags, they must   -->
+    <!-- be added before this line.                -->
+    <!--                                           -->
+    <script type="text/javascript" language="javascript" src="rfsample/rfsample.nocache.js"></script>
+  </head>
+
+  <!--                                           -->
+  <!-- The body can have arbitrary html, or      -->
+  <!-- you can leave the body empty if you want  -->
+  <!-- to create a completely dynamic UI.        -->
+  <!--                                           -->
+  <body>
+  	<div id="root-container">
+		<div id="root"></div>
+		Min length for "Firstname" and "Lastname" is 3 characters, max is 30 characters.
+		You should get a ConstraintViolationException if these conditions fail.<br /><br />
+		You should see the client side logging in your JS-Console. If you start the App with Eclipse
+		you will also see the logging (Server and Client) on your Eclipse Console.<br /><br />
+		Console logging is <strong>single-lined!!!</strong> for the client. This is done with SingleLineTextLogFormatter.
+		
+	</div>
+  </body>
+</html>
