@@ -1,11 +1,13 @@
 package at.mikemitterer.gwt.rfsample.server.domain;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.validation.constraints.Size;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Entity
 public class Person extends DatastoreObject {
 	private static Logger	logger	= LoggerFactory.getLogger(Person.class.getSimpleName());
 
