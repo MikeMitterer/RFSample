@@ -15,6 +15,7 @@
 	<!-- Other module inherits -->
     <!-- Logging                                      -->
     <inherits name="com.google.gwt.logging.Logging"/>
+  	<inherits name="at.mikemitterer.gwt.module.log" />
   
     <!-- Google Collections (Guava)                   -->
     <!-- Maven: http://stackoverflow.com/questions/2005687/guava-libraries-and-gwt/6201161#6201161 -->

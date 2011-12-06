@@ -8,10 +8,10 @@ import java.util.logging.Logger;
 
 import javax.validation.ConstraintViolation;
 
+import at.mikemitterer.gwt.module.log.SingleLineConsoleLogHandler;
+import at.mikemitterer.gwt.module.log.SingleLineSystemLogHandler;
 import at.mikemitterer.gwt.rfsample.client.PersonRequestFactory.PersonRequestContext;
 import at.mikemitterer.gwt.rfsample.client.model.PersonProxy;
-import at.mikemitterer.gwt.rfsample.client.util.SingleLineConsoleLogHandler;
-import at.mikemitterer.gwt.rfsample.client.util.SingleLineSystemLogHandler;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
