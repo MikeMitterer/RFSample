@@ -24,5 +24,9 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<url-pattern>/gwtRequest</url-pattern>
 </servlet-mapping>
 
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
 
 </web-app>
